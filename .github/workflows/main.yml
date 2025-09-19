@@ -29,9 +29,9 @@ jobs:
 
       # Sets an environment variable for the job
       - name: Run a one-line script
-        run: echo Hello, world! and ${{vars.TESTVARIABLE}}
+        run: echo ${{ vars.TESTVARIABLE }}!
 
       - name: Run a multi-line script
         run: |
-          echo Add ${{secrets.TEST_PASSWORD}} to the environment,
+          echo Add ${{ secrets.TEST_PASSWORD }} to the environment,
           echo Test, and deploy your project.
