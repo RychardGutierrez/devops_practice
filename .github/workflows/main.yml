@@ -34,4 +34,4 @@ jobs:
       - name: Run a multi-line script
         run: |
           echo Add ${{secrets.TEST_PASSWORD}} to the environment,
-          echo test, and deploy your project.
+          echo Test, and deploy your project.
