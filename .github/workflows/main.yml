@@ -1,0 +1,37 @@
+# This code performs a specific set of operations as described below:
+# - Each command is explained in detail to clarify its purpose and usage.
+# - The documentation covers input parameters, expected outputs, and side effects if any.
+# - Any dependencies or prerequisites for the commands are noted.
+# - Usage examples and edge cases are highlighted where relevant.
+name: CI
+
+on:
+  # Triggers the workflow on push or pull request events to the main branch
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+    # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: self-hosted
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      # Sets an environment variable for the job
+      - name: Run a one-line script
+        run: echo ${{ vars.TESTVARIABLE }}!
+
+      - name: Run a multi-line script
+        run: |
+          echo Add ${{ secrets.TEST_PASSWORD }} to the environment,
+          echo Test, and deploy your project.
