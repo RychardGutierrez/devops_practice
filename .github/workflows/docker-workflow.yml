@@ -11,7 +11,7 @@ on:
 
 jobs:
   validate-and-push:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     environment: devops-training
 
     steps:
@@ -42,3 +42,29 @@ jobs:
       - name: Push to Docker Hub
         run: |
           docker push "${{ vars.DOCKER_USERNAME }}/${{ vars.IMAGE_NAME }}:${{ vars.IMAGE_TAG }}"
+
+      # Step 6: Run container from the pushed image
+      - name: Run container from the pushed image
+        run: |
+          docker run -d -p 5173:5173 --name react_app \ "${{ vars.DOCKER_USERNAME }}/${{ vars.IMAGE_NAME }}:${{ vars.IMAGE_TAG }}"
+
+      # Step 7: wait for container to start
+      - name: Wait for container to start
+        run: sleep 10
+
+      # Step 8: Test the running container
+      - name: Test the running container
+        run: |
+          if curl --fail http://localhost:5173; then
+            echo "Container is running and responded correctly!"
+          else
+            echo "Container test failed!"
+            exit 1
+          fi
+
+      # Step 9: Stop and remove the container
+      - name: Stop and remove the container
+        if: always()
+        run: |
+          docker stop react_app
+          docker rm react_app
