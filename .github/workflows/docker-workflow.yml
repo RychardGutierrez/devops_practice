@@ -30,9 +30,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Test Docker access
-        run: |
-          docker version
-          docker info
+        run: C:\Windows\System32\wsl.exe docker info
 
       # Step 3: Debug Dockerfile presence (to confirm path)
       - name: Debug Dockerfile presence
