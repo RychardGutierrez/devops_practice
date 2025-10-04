@@ -13,9 +13,6 @@ jobs:
   validate-and-push:
     runs-on: self-hosted
     environment: devops-training
-    defaults:
-      run:
-        shell: bash
 
     steps:
       # Step 1: Checkout the repository
