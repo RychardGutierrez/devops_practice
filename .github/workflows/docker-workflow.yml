@@ -15,7 +15,7 @@ jobs:
     environment: devops-training
     defaults:
       run:
-        shell: wsl
+        shell: bash
 
     steps:
       # Step 1: Checkout the repository
