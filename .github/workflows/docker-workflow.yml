@@ -13,6 +13,9 @@ jobs:
   validate-and-push:
     runs-on: self-hosted
     environment: devops-training
+    defaults:
+      run:
+        shell: wsl {0}
 
     steps:
       # Step 1: Checkout the repository
@@ -26,15 +29,17 @@ jobs:
           username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Step 3: Debug Dockerfile presence
+      # Step 3: Debug Dockerfile presence (to confirm path)
       - name: Debug Dockerfile presence
-        run: dir .\react-docker
+        run: |
+          echo "Listing files in the react-docker directory:"
+          ls -al ./react-docker
 
       # Step 4: Build and Tag Docker Image
       - name: Build and Tag Docker Image
         run: |
-          docker build -f .\react-docker\dockerfile `
-            -t "${{ vars.DOCKER_USERNAME }}/${{ vars.IMAGE_NAME }}:${{ vars.IMAGE_TAG }}" .\react-docker
+          docker build -f ./react-docker/dockerfile \
+            -t "${{ vars.DOCKER_USERNAME }}/${{ vars.IMAGE_NAME }}:${{ vars.IMAGE_TAG }}" ./react-docker
 
       # Step 5: Push to Docker Hub
       - name: Push to Docker Hub
@@ -44,17 +49,21 @@ jobs:
       # Step 6: Run container from the pushed image
       - name: Run container from the pushed image
         run: |
-          docker run -d -p 5173:5173 --name react_app "${{ vars.DOCKER_USERNAME }}/${{ vars.IMAGE_NAME }}:${{ vars.IMAGE_TAG }}"
+          docker run -d -p 5173:5173 --name react_app \ "${{ vars.DOCKER_USERNAME }}/${{ vars.IMAGE_NAME }}:${{ vars.IMAGE_TAG }}"
 
-      # Step 7: Wait for container to start
+      # Step 7: wait for container to start
       - name: Wait for container to start
-        run: timeout /t 10
+        run: sleep 10
 
       # Step 8: Test the running container
       - name: Test the running container
         run: |
-          curl --fail http://localhost:5173 || exit 1
-          echo "Container is running and responded correctly!"
+          if curl --fail http://localhost:5173; then
+            echo "Container is running and responded correctly!"
+          else
+            echo "Container test failed!"
+            exit 1
+          fi
 
       # Step 9: Stop and remove the container
       - name: Stop and remove the container
