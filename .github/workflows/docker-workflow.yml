@@ -15,7 +15,7 @@ jobs:
     environment: devops-training
     defaults:
       run:
-        shell: C:\Windows\System32\wsl.exe
+        shell: C:\Windows\System32\bash.exe {0}
 
     steps:
       # Step 1: Checkout the repository
