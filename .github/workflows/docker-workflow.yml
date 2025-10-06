@@ -49,7 +49,7 @@ jobs:
       # Step 6: Run container from the pushed image
       - name: Run container from the pushed image
         run: |
-          docker run -d -p 5173:5173 --name react_app \ "${{ vars.DOCKER_USERNAME }}/${{ vars.IMAGE_NAME }}:${{ vars.IMAGE_TAG }}"
+          docker run -d -p 5173:5173 --name react_app "${{ vars.DOCKER_USERNAME }}/${{ vars.IMAGE_NAME }}:${{ vars.IMAGE_TAG }}"
 
       # Step 7: wait for container to start
       - name: Wait for container to start
